@@ -19,7 +19,8 @@
     </style>
 </head>
 <body>
-<script src="js/three.js"></script>
+<script src="../js/three.js"></script>
+<script src="..js/controls/OrbitControls.js"></script>
 <script>
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -28,12 +29,15 @@
     var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
     camera.position.set(0, 0, 100);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
-
+    var orbit = new THREE.OrbitControls( camera, renderer.domElement );
+    orbit.enableZoom = false;
     var scene = new THREE.Scene();
 
     //create a blue LineBasicMaterial
-    var material = new THREE.LineBasicMaterial({ color: 0xddffff });
-
+    var geometry = new THREE.SphereBufferGeometry( 5, 32, 32 );
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    var sphere = new THREE.Mesh( geometry, material );
+    scene.add( sphere );
     var geometry = new THREE.Geometry();
     geometry.vertices.push(new THREE.Vector3(-10, 0, 0));
     geometry.vertices.push(new THREE.Vector3(0, 10, 0));
@@ -68,44 +72,45 @@
             requestAnimationFrame( render1 );
         }
         animateVertices(geometry);
-
+        sphere.rotation.x += 0.005;
+        sphere.rotation.y += 0.005;
 
         renderer.render(scene, camera);
     };
     console.log(line);
     var animateVertices = function (geometry) {
-       // console.log(line);
-/*
-        ///// 1
-        if (line.geometry.vertices[0].x<0){
-        line.geometry.vertices[0].x+=0.1;
-        }
+        // console.log(line);
+        /*
+         ///// 1
+         if (line.geometry.vertices[0].x<0){
+         line.geometry.vertices[0].x+=0.1;
+         }
 
-        if (line.geometry.vertices[0].y<10) {
-            line.geometry.vertices[0].y += 0.1;
-        }
-        ///// 2
-        if (line.geometry.vertices[4].x>-10){
-            line.geometry.vertices[4].x-=0.2;
-        }
-
-
-
-        if (line.geometry.vertices[4].x<=-10) {
-            setTimeout(function(){
-                line.geometry.vertices[0].x=-10;
-                line.geometry.vertices[0].y=0;
-                run1 = false;
-                setTimeout(function(){
-                    line.geometry.vertices[0].x=0;
-                    line.geometry.vertices[0].y=0;
-                }, 1000);
-            }, 1000);
+         if (line.geometry.vertices[0].y<10) {
+         line.geometry.vertices[0].y += 0.1;
+         }
+         ///// 2
+         if (line.geometry.vertices[4].x>-10){
+         line.geometry.vertices[4].x-=0.2;
+         }
 
 
 
-        }
-            var day=123;
+         if (line.geometry.vertices[4].x<=-10) {
+         setTimeout(function(){
+         line.geometry.vertices[0].x=-10;
+         line.geometry.vertices[0].y=0;
+         run1 = false;
+         setTimeout(function(){
+         line.geometry.vertices[0].x=0;
+         line.geometry.vertices[0].y=0;
+         }, 1000);
+         }, 1000);
+
+
+
+         }
+         var day=123;
          var arr = line.geometry.vertices[0];
          switch (arr.join(' ')) {
          case {x: -20, y: 0, z: 0}:
