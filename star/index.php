@@ -122,6 +122,7 @@ setCamera(this.saved);
             console.log(object.position.y);
             scene.add( object );
             objects.push( object );
+            // test
         }
     );
 
