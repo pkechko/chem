@@ -22,6 +22,7 @@
 <script src="../js/three.js"></script>
 <script src="../js/controls/OrbitControls.js"></script>
 <script src="../js/extend/ElementStructure.js"></script>
+<script src="../js/extend/ElementPosition.js"></script>
 <script>
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -38,6 +39,9 @@
 
 
     addgeom(list);
+    var formula = 'h2o';
+    var breakdown = calculatePositions(formula);
+    console.log(breakdown);
 
 
     /*or (i = 0; i < list.length; i++) {
