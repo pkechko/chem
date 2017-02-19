@@ -1,8 +1,8 @@
 
 //console.log(saved.x);
 function setCamera(saved) {
-    camera.parent.position.x =saved.x;
-    camera.parent.position.y =saved.y;
-    camera.parent.position.z =saved.z;
-    console.log(camera.parent.position);
+    controls.getObject().position.x =saved.x;
+    controls.getObject().position.y =saved.y;
+    controls.getObject().position.z =saved.z;
+    console.log(controls.getObject().position);
 }

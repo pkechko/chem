@@ -12,14 +12,41 @@ function init() {
     controls = new THREE.PointerLockControls( camera );
     scene.add( controls.getObject() );
     var onKeyDown = function ( event ) {
+        //console.log(event);
         switch ( event.keyCode ) {
             case 38: // up
+            case 82: // r
+
+                    //engineShaking();
+                shipStart=true;
+
+            break;
             case 87: // w
-                moveForward = true;
+
+                var raycaster2 = new THREE.Raycaster(myPosition(),myDirection(), 0, 100);
+                //raycaster2.setFromCamera( myDirection(), camera );
+
+                var intersects = raycaster2.intersectObjects(scene.children, true);
+                console.log(intersects);
+                if (intersects.length>0){
+                    //intersects[ 0 ].object.material.color.setHex( 0xffffff );
+                    console.log(intersects[0].distance);
+                    console.log(intersects);
+                    if (intersects[0].distance > 5) {
+                        moveForward = true;
+                    } else {
+                        moveForward = false;
+                    }
+                } else {
+                    moveForward=true;
+                }
+
                 break;
             case 37: // left
             case 65: // a
-                moveLeft = true; break;
+                moveLeft = true;
+            break;
+
             case 40: // down
             case 83: // s
                 moveBackward = true;
@@ -29,7 +56,7 @@ function init() {
                 moveRight = true;
                 break;
             case 32: // space
-                if ( canJump === true ) velocity.y += 350;
+                if ( canJump === true ) velocity.y += 250;
                 canJump = false;
                 break;
         }
@@ -39,6 +66,12 @@ function init() {
             case 38: // up
             case 87: // w
                 moveForward = false;
+                break;
+            case 82: // r
+
+                //engineShaking();
+                shipStart=false;
+
                 break;
             case 37: // left
             case 65: // a
@@ -80,7 +113,11 @@ function rayCasterStart() {
         raycaster.ray.origin.copy( controls.getObject().position );
         raycaster.ray.origin.y -= 10;
         var intersections = raycaster.intersectObjects( objects );
+        //console.log(intersections);
         var isOnObject = intersections.length > 0;
+        if (isOnObject) {
+            console.log("test");
+        }
         var time = performance.now();
         var delta = ( time - prevTime ) / 1000;
         velocity.x -= velocity.x * 10.0 * delta;
@@ -94,9 +131,14 @@ function rayCasterStart() {
             velocity.y = Math.max( 0, velocity.y );
             canJump = true;
         }
+        if ( shipStart ) shipVelocity.y += 40.0 * delta;
         controls.getObject().translateX( velocity.x * delta );
         controls.getObject().translateY( velocity.y * delta );
         controls.getObject().translateZ( velocity.z * delta );
+        //ship.translateX( velocity.x * delta );
+       // ship.translateY( shipVelocity.y * delta );
+        //ship.translateZ( velocity.z * delta );
+        //var shipVelocity = new THREE.Vector3();
         if ( controls.getObject().position.y < 10 ) {
             velocity.y = 0;
             controls.getObject().position.y = 10;

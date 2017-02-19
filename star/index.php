@@ -68,6 +68,8 @@ $mode = fly;
 <script src="custom_js/instructions.js"></script>
 <script src="custom_js/saving.js"></script>
 <script src="custom_js/PointerLockControls_rewrite.js"></script>
+<script src="custom_js/location.js"></script>
+<script src="custom_js/startFlight.js"></script>
 <script>
 //    var renderer = new THREE.WebGLRenderer();
 //    renderer.setSize(window.innerWidth, window.innerHeight);
@@ -93,18 +95,20 @@ var moveBackward = false;
 var moveLeft = false;
 var moveRight = false;
 var canJump = false;
+var shipStart = false;
 var prevTime = performance.now();
 var velocity = new THREE.Vector3();
+var shipVelocity = new THREE.Vector3();
 
 instructions();
 init();
-this.saved = new saved(0,0,0);
-setCamera(this.saved);
+var savedP = new saved(0,0,50);
+setCamera(savedP);
     // instantiate a loader
     var loader = new THREE.JSONLoader();
     modelLights();
     // load a resource
-
+var ship;
     loader.load(
         // resource URL
         'models/test6.json',
@@ -112,21 +116,27 @@ setCamera(this.saved);
         function ( geometry, materials ) {
             var material = new THREE.MultiMaterial( materials );
             //var material = new THREE.MeshPhysicalMaterial( {color: 0x0000ff} );
-            var object = new THREE.Mesh( geometry, material );
-            object.position.y=5;
-            object.position.z=-10;
-            var scaling = 5;
-            object.scale.x = scaling;
-            object.scale.y = scaling;
-            object.scale.z = scaling;
-            console.log(object.position.y);
-            scene.add( object );
-            objects.push( object );
+            ship = new THREE.Mesh( geometry, material );
+            ship.position.y=0;
+            ship.position.z=-10;
+            var scaling = 10;
+            ship.scale.x = scaling;
+            ship.scale.y = scaling;
+            ship.scale.z = scaling;
+            console.log(ship.position.y);
+            ship.geometry.computeVertexNormals();
+            scene.add( ship );
+            objects.push( ship );
             // test
         }
     );
 
+var geometry = new THREE.BoxGeometry( 40, 40, 3 );
+var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, side: THREE.DoubleSide } );
+var cube = new THREE.Mesh( geometry, material );
+//scene.add( cube );
 
+//objects.push( cube );
 
 
 
